@@ -237,12 +237,11 @@ async function fetchData() {
 
 function ingest(comps) {
   LB = comps.map(c => {
-    const sc = c.score?.displayValue ?? "E";
     const status = c.status?.type?.name || "";
     const cut = status.includes("CUT") || c.status?.type?.id === "6";
     return {
       rawName: c.athlete?.displayName || "",
-      score: parseSc(sc),
+      score: parseSc(c.score?.displayValue ?? "E"),
       thru: c.status?.thru ?? c.status?.displayValue ?? "--",
       rounds: (c.linescores||[]).map(r => r.displayValue),
       pos: c.status?.position?.displayValue || "--",
@@ -253,7 +252,7 @@ function ingest(comps) {
   render();
 }
 
-const parseSc = s => { if(!s||s==="E"||s==="0")return 0; const n=parseInt(s.replace("+",""),10); return isNaN(n)?0:n; };
+const parseSc = s => { if(!s||s==="E"||s==="0")return 0; const n=parseInt(s.replace("+","").replace(/[\u2212\u2013]/g,"-"),10); return isNaN(n)?0:n; };
 const fmtSc   = s => s===null?"–":s===0?"E":s>0?"+"+s:""+s;
 const scCls   = s => s===null?"nd":s<0?"under":s>0?"over":"even";
 
