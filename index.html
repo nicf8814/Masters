@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -141,7 +140,6 @@
 </div>
 
 <script>
-// ── ROSTERS ──────────────────────────────────────────────
 const TIER1 = {
   "Big Mo":["Akshay Bhatia","Brian Harman","Brooks Koepka","Jon Rahm","Kurt Kitayama","Rasmus Hojgaard"],
   "Clint": ["J.J. Spaun","Matt Fitzpatrick","Patrick Cantlay","Patrick Reed","Ryan Fox","Ryan Gerard"],
@@ -169,16 +167,11 @@ const TIER2 = {
 
 let LB = [];
 
-// ── NAME HELPERS ─────────────────────────────────────────
-// Use Unicode normalization to strip accents properly
 function normName(s) {
   return s.normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().trim().replace(/\s+/g," ");
 }
-function lastName(s) {
-  return normName(s).split(" ").pop();
-}
+function lastName(s) { return normName(s).split(" ").pop(); }
 
-// Build last-name → {owner,tier} lookup from rosters
 function buildLookup() {
   const map = {};
   for (const [owner,gs] of Object.entries(TIER1)) gs.forEach(g => map[lastName(g)] = {owner,tier:1});
@@ -186,16 +179,11 @@ function buildLookup() {
   return map;
 }
 
-// Match roster name to live leaderboard entry
 function findPlayer(rosterName) {
-  const fn = normName(rosterName);
-  const ln = lastName(rosterName);
-  return LB.find(p => normName(p.rawName) === fn)
-      || LB.find(p => lastName(p.rawName) === ln)
-      || null;
+  const fn = normName(rosterName), ln = lastName(rosterName);
+  return LB.find(p => normName(p.rawName) === fn) || LB.find(p => lastName(p.rawName) === ln) || null;
 }
 
-// ── FETCH ────────────────────────────────────────────────
 const ESPN_EVENT = "https://site.api.espn.com/apis/site/v2/sports/golf/leaderboard?league=pga&event=401811941";
 const ESPN_PGA   = "https://site.api.espn.com/apis/site/v2/sports/golf/pga/leaderboard";
 const PROXIES = [
@@ -216,7 +204,6 @@ async function fetchData() {
         if (!txt || txt.length < 100) continue;
         const parsed = JSON.parse(txt);
         const raw = parsed.contents ? JSON.parse(parsed.contents) : parsed;
-
         let comps = null;
         if (raw?.competitions?.[0]?.competitors?.length) {
           comps = raw.competitions[0].competitors;
@@ -230,14 +217,13 @@ async function fetchData() {
           }
         }
         if (comps?.length) { ingest(comps); return; }
-      } catch(e) { /* try next proxy */ }
+      } catch(e) {}
     }
   }
   document.getElementById("lastUpdated").textContent = "⚠ Could not load scores. Tap ↻ to retry.";
   if (!LB.length) noData();
 }
 
-// ── INGEST ESPN DATA ─────────────────────────────────────
 function ingest(comps) {
   LB = comps.map(c => {
     const sc = c.score?.displayValue ?? "E";
@@ -251,30 +237,20 @@ function ingest(comps) {
       pos: c.status?.position?.displayValue || "--",
       cut
     };
-  }).sort((a,b) => {
-    if (a.cut && !b.cut) return 1;
-    if (!a.cut && b.cut) return -1;
-    return a.score - b.score;
-  });
-  document.getElementById("lastUpdated").textContent =
-    "Updated: " + new Date().toLocaleTimeString() + " · Auto-refreshes every 2 min";
+  }).sort((a,b) => { if(a.cut&&!b.cut)return 1; if(!a.cut&&b.cut)return -1; return a.score-b.score; });
+  document.getElementById("lastUpdated").textContent = "Updated: " + new Date().toLocaleTimeString() + " · Auto-refreshes every 2 min";
   render();
 }
 
-// ── SCORE UTILS ───────────────────────────────────────────
-const parseSc = s => { if (!s||s==="E"||s==="0") return 0; const n=parseInt(s.replace("+",""),10); return isNaN(n)?0:n; };
+const parseSc = s => { if(!s||s==="E"||s==="0")return 0; const n=parseInt(s.replace("+",""),10); return isNaN(n)?0:n; };
 const fmtSc   = s => s===null?"–":s===0?"E":s>0?"+"+s:""+s;
 const scCls   = s => s===null?"nd":s<0?"under":s>0?"over":"even";
 
-// ── WIN PROBABILITY ───────────────────────────────────────
 function gaussRnd() { return Math.sqrt(-2*Math.log(1-Math.random()))*Math.cos(2*Math.PI*Math.random()); }
 
 function roundsDone() {
   if (!LB.length) return 0;
-  const thrus = LB.filter(p=>!p.cut).map(p => {
-    if (p.thru==="F"||p.thru==="18") return 18;
-    const n=parseInt(p.thru,10); return isNaN(n)?0:n;
-  });
+  const thrus = LB.filter(p=>!p.cut).map(p => { if(p.thru==="F"||p.thru==="18")return 18; const n=parseInt(p.thru,10); return isNaN(n)?0:n; });
   const avg = thrus.length ? thrus.reduce((a,b)=>a+b,0)/thrus.length : 0;
   const maxR = Math.max(...LB.map(p=>(p.rounds||[]).length),0);
   return Math.max(Math.floor(avg/18), maxR>0?maxR-1:0);
@@ -286,13 +262,12 @@ function winProb(myScore, allScores, rd) {
   let wins=0; const N=3000;
   for (let i=0;i<N;i++) {
     const me=myScore+gaussRnd()*sd; let w=true;
-    for (const o of allScores) { if (o!==myScore && o+gaussRnd()*sd<=me){w=false;break;} }
+    for (const o of allScores) { if(o!==myScore&&o+gaussRnd()*sd<=me){w=false;break;} }
     if(w) wins++;
   }
   return wins/N*100;
 }
 
-// ── BUILD PARTICIPANTS ────────────────────────────────────
 function buildParts(roster) {
   const rd = roundsDone();
   const parts = Object.entries(roster).map(([name,golfers]) => {
@@ -304,22 +279,14 @@ function buildParts(roster) {
   });
   const bests = parts.map(p=>p.best).filter(s=>s!==null);
   parts.forEach(p => { p.prob = p.best!==null ? winProb(p.best,bests,rd) : null; });
-  return parts.sort((a,b) => {
-    if (a.best===null&&b.best===null) return 0;
-    if (a.best===null) return 1;
-    if (b.best===null) return -1;
-    return a.best-b.best;
-  });
+  return parts.sort((a,b) => { if(a.best===null&&b.best===null)return 0; if(a.best===null)return 1; if(b.best===null)return -1; return a.best-b.best; });
 }
 
-// ── RENDER ALL ────────────────────────────────────────────
 function render() {
   const t1=buildParts(TIER1), t2=buildParts(TIER2);
   const l1=t1[0], l2=t2[0];
-  document.getElementById("pot1Leader").innerHTML = l1?.best!==null
-    ? `Current leader: <strong>${l1.name}</strong> (${fmtSc(l1.best)})` : "No scores yet";
-  document.getElementById("pot2Leader").innerHTML = l2?.best!==null
-    ? `Current leader: <strong>${l2.name}</strong> (${fmtSc(l2.best)})` : "No scores yet";
+  document.getElementById("pot1Leader").innerHTML = l1?.best!==null ? `Current leader: <strong>${l1.name}</strong> (${fmtSc(l1.best)})` : "No scores yet";
+  document.getElementById("pot2Leader").innerHTML = l2?.best!==null ? `Current leader: <strong>${l2.name}</strong> (${fmtSc(l2.best)})` : "No scores yet";
   renderGrid("tier1Standings",t1,75);
   renderGrid("tier2Standings",t2,25);
   renderLB();
@@ -382,8 +349,7 @@ function renderLB() {
       <td class="thru" style="font-size:11px;color:rgba(245,240,232,.4)">${rounds}</td>
     </tr>`;
   }).join("");
-  document.getElementById("fullLeaderboard").innerHTML=
-    `<table class="lb-table"><thead><tr><th>Pos</th><th>Player</th><th>Score</th><th>Thru</th><th>Rounds</th></tr></thead><tbody>${rows}</tbody></table>`;
+  document.getElementById("fullLeaderboard").innerHTML=`<table class="lb-table"><thead><tr><th>Pos</th><th>Player</th><th>Score</th><th>Thru</th><th>Rounds</th></tr></thead><tbody>${rows}</tbody></table>`;
 }
 
 function checkAlert() {
@@ -392,8 +358,7 @@ function checkAlert() {
   const info=lookup[lastName(leader.rawName)];
   const alertEl=document.getElementById("tier2Alert");
   if (info?.tier===2) {
-    document.getElementById("tier2AlertText").textContent=
-      `🏆 ${leader.rawName} (${fmtSc(leader.score)}) is a Tier 2 golfer owned by ${info.owner} and is LEADING THE TOURNAMENT! If they win, ${info.owner} takes the full $100!`;
+    document.getElementById("tier2AlertText").textContent=`🏆 ${leader.rawName} (${fmtSc(leader.score)}) is a Tier 2 golfer owned by ${info.owner} and is LEADING THE TOURNAMENT! If they win, ${info.owner} takes the full $100!`;
     alertEl.classList.add("show");
   } else { alertEl.classList.remove("show"); }
 }
@@ -406,8 +371,7 @@ function switchTab(e,name) {
 }
 
 fetchData();
-setInterval(fetchData, 120000); // auto-refresh every 2 minutes
+setInterval(fetchData, 120000);
 </script>
-
 </body>
 </html>
