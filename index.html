@@ -174,8 +174,8 @@ function lastName(s) { return normName(s).split(" ").pop(); }
 
 function buildLookup() {
   const map = {};
-  for (const [owner,gs] of Object.entries(TIER1)) gs.forEach(g => map[lastName(g)] = {owner,tier:1});
-  for (const [owner,gs] of Object.entries(TIER2)) gs.forEach(g => map[lastName(g)] = {owner,tier:2});
+  for (const [owner,gs] of Object.entries(TIER1)) gs.forEach(g => map[normName(g)] = {owner,tier:1});
+  for (const [owner,gs] of Object.entries(TIER2)) gs.forEach(g => map[normName(g)] = {owner,tier:2});
   return map;
 }
 
@@ -193,32 +193,43 @@ const PROXIES = [
   u => `https://thingproxy.freeboard.io/fetch/${u}`,
 ];
 
+function parseComps(raw) {
+  if (raw?.competitions?.[0]?.competitors?.length) return raw.competitions[0].competitors;
+  if (raw?.events?.length) {
+    let comps = null;
+    for (const ev of raw.events) {
+      const c = ev?.competitions?.[0]?.competitors;
+      if (!c?.length) continue;
+      const isMasters = (ev.name||ev.shortName||"").toLowerCase().includes("master");
+      if (isMasters || !comps) comps = c;
+      if (isMasters) break;
+    }
+    return comps;
+  }
+  return null;
+}
+
+async function tryProxy(px, ep) {
+  const bust = ep.includes("?") ? `&_=${Date.now()}` : `?_=${Date.now()}`;
+  const r = await fetch(px(ep + bust), {cache:"no-store"});
+  if (!r.ok) throw new Error("not ok");
+  const txt = await r.text();
+  if (!txt || txt.length < 100) throw new Error("empty");
+  const parsed = JSON.parse(txt);
+  const raw = parsed.contents ? JSON.parse(parsed.contents) : parsed;
+  const comps = parseComps(raw);
+  if (!comps?.length) throw new Error("no competitors");
+  return comps;
+}
+
 async function fetchData() {
   document.getElementById("lastUpdated").textContent = "Fetching scores…";
   for (const ep of [ESPN_EVENT, ESPN_PGA]) {
-    for (const px of PROXIES) {
-      try {
-        const r = await fetch(px(ep));
-        if (!r.ok) continue;
-        const txt = await r.text();
-        if (!txt || txt.length < 100) continue;
-        const parsed = JSON.parse(txt);
-        const raw = parsed.contents ? JSON.parse(parsed.contents) : parsed;
-        let comps = null;
-        if (raw?.competitions?.[0]?.competitors?.length) {
-          comps = raw.competitions[0].competitors;
-        } else if (raw?.events?.length) {
-          for (const ev of raw.events) {
-            const c = ev?.competitions?.[0]?.competitors;
-            if (!c?.length) continue;
-            const isMasters = (ev.name||ev.shortName||"").toLowerCase().includes("master");
-            if (isMasters || !comps) comps = c;
-            if (isMasters) break;
-          }
-        }
-        if (comps?.length) { ingest(comps); return; }
-      } catch(e) {}
-    }
+    try {
+      const comps = await Promise.any(PROXIES.map(px => tryProxy(px, ep)));
+      ingest(comps);
+      return;
+    } catch(e) { console.error("All proxies failed for", ep, e); }
   }
   document.getElementById("lastUpdated").textContent = "⚠ Could not load scores. Tap ↻ to retry.";
   if (!LB.length) noData();
@@ -238,7 +249,7 @@ function ingest(comps) {
       cut
     };
   }).sort((a,b) => { if(a.cut&&!b.cut)return 1; if(!a.cut&&b.cut)return -1; return a.score-b.score; });
-  document.getElementById("lastUpdated").textContent = "Updated: " + new Date().toLocaleTimeString() + " · Auto-refreshes every 2 min";
+  document.getElementById("lastUpdated").textContent = "Updated: " + new Date().toLocaleTimeString() + " · Auto-refreshes every 45 sec";
   render();
 }
 
@@ -283,14 +294,15 @@ function buildParts(roster) {
 }
 
 function render() {
+  const lookup=buildLookup();
   const t1=buildParts(TIER1), t2=buildParts(TIER2);
   const l1=t1[0], l2=t2[0];
   document.getElementById("pot1Leader").innerHTML = l1?.best!==null ? `Current leader: <strong>${l1.name}</strong> (${fmtSc(l1.best)})` : "No scores yet";
   document.getElementById("pot2Leader").innerHTML = l2?.best!==null ? `Current leader: <strong>${l2.name}</strong> (${fmtSc(l2.best)})` : "No scores yet";
   renderGrid("tier1Standings",t1,75);
   renderGrid("tier2Standings",t2,25);
-  renderLB();
-  checkAlert();
+  renderLB(lookup);
+  checkAlert(lookup);
 }
 
 function noData() {
@@ -332,11 +344,10 @@ function renderGrid(id, parts, prize) {
   }).join("");
 }
 
-function renderLB() {
+function renderLB(lookup) {
   if (!LB.length) { document.getElementById("fullLeaderboard").innerHTML='<div class="loading-state">No data yet</div>'; return; }
-  const lookup=buildLookup();
   const rows=LB.map(p=>{
-    const info=lookup[lastName(p.rawName)];
+    const info=lookup[normName(p.rawName)];
     const badge=info?`<span class="ownbadge bt${info.tier}">${info.owner} · T${info.tier}</span>`:"";
     const cls=info?`owned-t${info.tier}`:"";
     const sc=p.cut?"cut":scCls(p.score);
@@ -352,10 +363,10 @@ function renderLB() {
   document.getElementById("fullLeaderboard").innerHTML=`<table class="lb-table"><thead><tr><th>Pos</th><th>Player</th><th>Score</th><th>Thru</th><th>Rounds</th></tr></thead><tbody>${rows}</tbody></table>`;
 }
 
-function checkAlert() {
+function checkAlert(lookup) {
   if (!LB.length) return;
-  const leader=LB[0], lookup=buildLookup();
-  const info=lookup[lastName(leader.rawName)];
+  const leader=LB[0];
+  const info=lookup[normName(leader.rawName)];
   const alertEl=document.getElementById("tier2Alert");
   if (info?.tier===2) {
     document.getElementById("tier2AlertText").textContent=`🏆 ${leader.rawName} (${fmtSc(leader.score)}) is a Tier 2 golfer owned by ${info.owner} and is LEADING THE TOURNAMENT! If they win, ${info.owner} takes the full $100!`;
@@ -371,7 +382,7 @@ function switchTab(e,name) {
 }
 
 fetchData();
-setInterval(fetchData, 120000);
+setInterval(fetchData, 45000);
 </script>
 </body>
 </html>
