@@ -3,206 +3,100 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>The Masters 2025 — Friend Group Tracker</title>
+<title>The Masters 2026 — Friend Group Tracker</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
-    --masters-green: #1a4a2e;
-    --masters-green-mid: #2d6b47;
-    --masters-green-light: #3d8b5e;
-    --masters-gold: #c9a84c;
-    --masters-gold-light: #e8c97a;
-    --masters-cream: #f5f0e8;
-    --masters-white: #fdfaf5;
-    --masters-dark: #0d2417;
-    --red: #c0392b;
-    --red-light: #e74c3c;
-    --shadow: 0 4px 24px rgba(0,0,0,0.18);
+    --green: #1a4a2e; --green-mid: #2d6b47; --green-light: #3d8b5e;
+    --gold: #c9a84c; --gold-light: #e8c97a; --cream: #f5f0e8;
+    --dark: #0d2417; --red: #c0392b; --red-light: #e74c3c;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body {
-    background: var(--masters-dark);
-    background-image: radial-gradient(ellipse at 20% 20%, rgba(45,107,71,0.25) 0%, transparent 60%), radial-gradient(ellipse at 80% 80%, rgba(26,74,46,0.3) 0%, transparent 60%);
-    color: var(--masters-cream);
-    font-family: 'EB Garamond', Georgia, serif;
-    min-height: 100vh;
-  }
-  header {
-    background: linear-gradient(180deg, #0a1a0f 0%, var(--masters-dark) 100%);
-    border-bottom: 2px solid var(--masters-gold);
-    padding: 28px 20px 20px;
-    text-align: center;
-    position: relative;
-    overflow: hidden;
-  }
-  header::before {
-    content: '';
-    position: absolute; inset: 0;
-    background: repeating-linear-gradient(90deg, transparent, transparent 60px, rgba(201,168,76,0.04) 60px, rgba(201,168,76,0.04) 61px);
-    pointer-events: none;
-  }
-  .header-badge {
-    display: inline-block;
-    border: 1px solid var(--masters-gold);
-    color: var(--masters-gold);
-    font-family: 'Montserrat', sans-serif;
-    font-size: 10px; font-weight: 600;
-    letter-spacing: 3px; text-transform: uppercase;
-    padding: 4px 14px; margin-bottom: 10px;
-  }
-  header h1 {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(28px, 5vw, 52px);
-    font-weight: 700; color: var(--masters-cream);
-    letter-spacing: 1px; line-height: 1.1;
-  }
-  header h1 span { color: var(--masters-gold); font-style: italic; }
-  .header-sub {
-    font-family: 'Montserrat', sans-serif;
-    font-size: 11px; letter-spacing: 2px;
-    color: var(--masters-gold-light);
-    margin-top: 6px; text-transform: uppercase; opacity: 0.8;
-  }
-  .live-badge {
-    display: inline-flex; align-items: center; gap: 6px;
-    background: rgba(192,57,43,0.15); border: 1px solid var(--red);
-    color: var(--red-light); font-family: 'Montserrat', sans-serif;
-    font-size: 10px; font-weight: 600; letter-spacing: 2px;
-    padding: 4px 10px; margin-top: 12px; text-transform: uppercase;
-  }
-  .live-dot {
-    width: 7px; height: 7px; background: var(--red-light);
-    border-radius: 50%; animation: pulse 1.4s infinite;
-  }
+  body { background: var(--dark); background-image: radial-gradient(ellipse at 20% 20%, rgba(45,107,71,0.25) 0%, transparent 60%), radial-gradient(ellipse at 80% 80%, rgba(26,74,46,0.3) 0%, transparent 60%); color: var(--cream); font-family: 'EB Garamond', Georgia, serif; min-height: 100vh; }
+  header { background: linear-gradient(180deg, #0a1a0f 0%, var(--dark) 100%); border-bottom: 2px solid var(--gold); padding: 24px 20px 16px; text-align: center; }
+  .header-badge { display: inline-block; border: 1px solid var(--gold); color: var(--gold); font-family: 'Montserrat', sans-serif; font-size: 10px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; padding: 4px 14px; margin-bottom: 10px; }
+  header h1 { font-family: 'Playfair Display', serif; font-size: clamp(26px, 5vw, 48px); font-weight: 700; color: var(--cream); }
+  header h1 span { color: var(--gold); font-style: italic; }
+  .header-sub { font-family: 'Montserrat', sans-serif; font-size: 11px; letter-spacing: 2px; color: var(--gold-light); margin-top: 4px; text-transform: uppercase; opacity: 0.8; }
+  .header-controls { display: flex; align-items: center; justify-content: center; gap: 12px; margin-top: 10px; flex-wrap: wrap; }
+  .live-badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(192,57,43,0.15); border: 1px solid var(--red); color: var(--red-light); font-family: 'Montserrat', sans-serif; font-size: 10px; font-weight: 600; letter-spacing: 2px; padding: 4px 10px; text-transform: uppercase; }
+  .live-dot { width: 7px; height: 7px; background: var(--red-light); border-radius: 50%; animation: pulse 1.4s infinite; }
   @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.4;transform:scale(0.7)} }
-  .last-updated {
-    font-family: 'Montserrat', sans-serif; font-size: 10px;
-    color: rgba(245,240,232,0.45); margin-top: 6px; letter-spacing: 1px;
-  }
-  .header-controls {
-    display: flex; align-items: center; justify-content: center;
-    gap: 12px; margin-top: 10px; flex-wrap: wrap;
-  }
-  .refresh-btn {
-    background: none; border: 1px solid rgba(201,168,76,0.35);
-    color: var(--masters-gold); font-family: 'Montserrat', sans-serif;
-    font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
-    padding: 7px 16px; cursor: pointer; transition: all 0.2s;
-    display: inline-flex; align-items: center; gap: 6px;
-  }
-  .refresh-btn:hover { background: rgba(201,168,76,0.1); }
+  .refresh-btn { background: none; border: 1px solid rgba(201,168,76,0.35); color: var(--gold); font-family: 'Montserrat', sans-serif; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; padding: 7px 16px; cursor: pointer; }
+  .last-updated { font-family: 'Montserrat', sans-serif; font-size: 10px; color: rgba(245,240,232,0.45); margin-top: 6px; letter-spacing: 1px; }
   .container { max-width: 1400px; margin: 0 auto; padding: 24px 16px 60px; }
   .pots-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 28px; }
-  @media (max-width: 600px) { .pots-row { grid-template-columns: 1fr; } }
-  .pot-card {
-    background: linear-gradient(135deg, rgba(45,107,71,0.25), rgba(13,36,23,0.6));
-    border: 1px solid rgba(201,168,76,0.35);
-    padding: 20px 24px; text-align: center; position: relative; overflow: hidden;
-  }
-  .pot-card::after {
-    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
-    background: linear-gradient(90deg, transparent, var(--masters-gold), transparent);
-  }
-  .pot-label { font-family: 'Montserrat', sans-serif; font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: var(--masters-gold); margin-bottom: 6px; }
-  .pot-amount { font-family: 'Playfair Display', serif; font-size: 36px; font-weight: 700; color: var(--masters-gold-light); }
+  @media(max-width:600px){ .pots-row { grid-template-columns: 1fr; } }
+  .pot-card { background: linear-gradient(135deg, rgba(45,107,71,0.25), rgba(13,36,23,0.6)); border: 1px solid rgba(201,168,76,0.35); padding: 20px 24px; text-align: center; position: relative; }
+  .pot-card::after { content:''; position:absolute; top:0; left:0; right:0; height:2px; background: linear-gradient(90deg, transparent, var(--gold), transparent); }
+  .pot-label { font-family: 'Montserrat', sans-serif; font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: var(--gold); margin-bottom: 6px; }
+  .pot-amount { font-family: 'Playfair Display', serif; font-size: 34px; font-weight: 700; color: var(--gold-light); }
   .pot-leader { font-size: 13px; color: rgba(245,240,232,0.7); margin-top: 4px; font-style: italic; }
-  .pot-leader strong { color: var(--masters-cream); font-style: normal; }
-  .section-title {
-    font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 600;
-    color: var(--masters-gold); border-bottom: 1px solid rgba(201,168,76,0.3);
-    padding-bottom: 10px; margin-bottom: 16px;
-    display: flex; align-items: center; gap: 10px;
-  }
-  .section-title .pill {
-    font-family: 'Montserrat', sans-serif; font-size: 9px; letter-spacing: 2px;
-    text-transform: uppercase; background: var(--masters-green); color: var(--masters-gold);
-    padding: 3px 10px; border: 1px solid rgba(201,168,76,0.4);
-  }
+  .pot-leader strong { color: var(--cream); font-style: normal; }
+  .tabs { display: flex; margin-bottom: 24px; border-bottom: 1px solid rgba(201,168,76,0.25); }
+  .tab-btn { background: none; border: none; border-bottom: 2px solid transparent; color: rgba(245,240,232,0.45); font-family: 'Montserrat', sans-serif; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; padding: 10px 20px; cursor: pointer; margin-bottom: -1px; transition: all 0.2s; }
+  .tab-btn.active { color: var(--gold); border-bottom-color: var(--gold); }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+  .section-title { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 600; color: var(--gold); border-bottom: 1px solid rgba(201,168,76,0.3); padding-bottom: 10px; margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
+  .pill { font-family: 'Montserrat', sans-serif; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; background: var(--green); color: var(--gold); padding: 3px 10px; border: 1px solid rgba(201,168,76,0.4); }
   .standings-section { margin-bottom: 36px; }
   .standings-grid { display: grid; gap: 10px; }
-  .player-card {
-    background: rgba(13,36,23,0.7); border: 1px solid rgba(201,168,76,0.15);
-    padding: 14px 18px; display: grid;
-    grid-template-columns: 36px 1fr auto auto auto;
-    align-items: center; gap: 12px;
-    transition: border-color 0.2s, background 0.2s; cursor: default;
-  }
-  .player-card:hover { border-color: rgba(201,168,76,0.45); background: rgba(26,74,46,0.35); }
+  .player-card { background: rgba(13,36,23,0.7); border: 1px solid rgba(201,168,76,0.15); padding: 14px 18px; display: grid; grid-template-columns: 36px 1fr auto auto auto; align-items: center; gap: 12px; transition: border-color 0.2s, background 0.2s; }
+  .player-card:hover { border-color: rgba(201,168,76,0.4); background: rgba(26,74,46,0.3); }
   .player-card.rank-1 { border-color: rgba(201,168,76,0.6); background: rgba(45,107,71,0.3); }
   .player-card.rank-2 { border-color: rgba(201,168,76,0.35); }
   .player-card.rank-3 { border-color: rgba(201,168,76,0.25); }
-  @keyframes alert-glow { 0%,100%{box-shadow:0 0 0 0 rgba(192,57,43,0)} 50%{box-shadow:0 0 16px 2px rgba(192,57,43,0.3)} }
-  .rank-num { font-family: 'Montserrat', sans-serif; font-size: 18px; font-weight: 600; color: var(--masters-gold); text-align: center; opacity: 0.8; }
-  .rank-1 .rank-num { opacity: 1; font-size: 22px; }
+  .rank-num { font-family: 'Montserrat', sans-serif; font-size: 18px; font-weight: 600; color: var(--gold); text-align: center; opacity: 0.8; }
+  .rank-1 .rank-num { opacity:1; font-size:22px; }
   .player-info { min-width: 0; }
-  .player-name-main { font-family: 'Playfair Display', serif; font-size: 17px; font-weight: 600; color: var(--masters-cream); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .player-golfers { font-family: 'Montserrat', sans-serif; font-size: 10px; color: rgba(245,240,232,0.5); margin-top: 3px; line-height: 1.5; }
-  .golfer-tag { display: inline-block; margin-right: 4px; margin-bottom: 2px; }
-  .golfer-score-inline { font-size: 10px; font-family: 'Montserrat', sans-serif; padding: 1px 5px; border-radius: 2px; }
-  .golfer-score-inline.under { background: rgba(45,107,71,0.5); color: #7ec99a; }
-  .golfer-score-inline.over { background: rgba(192,57,43,0.3); color: #e07a7a; }
-  .golfer-score-inline.even { background: rgba(245,240,232,0.1); color: rgba(245,240,232,0.6); }
-  .golfer-score-inline.cut { background: rgba(100,100,100,0.3); color: rgba(245,240,232,0.4); text-decoration: line-through; }
+  .player-name-main { font-family: 'Playfair Display', serif; font-size: 17px; font-weight: 600; color: var(--cream); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .player-golfers { font-family: 'Montserrat', sans-serif; font-size: 10px; color: rgba(245,240,232,0.5); margin-top: 3px; line-height: 1.6; }
+  .gtag { display: inline-block; margin-right: 4px; margin-bottom: 2px; }
+  .gs { font-size: 10px; font-family: 'Montserrat', sans-serif; padding: 1px 5px; border-radius: 2px; }
+  .gs.under { background: rgba(45,107,71,0.5); color: #7ec99a; }
+  .gs.over { background: rgba(192,57,43,0.3); color: #e07a7a; }
+  .gs.even { background: rgba(245,240,232,0.1); color: rgba(245,240,232,0.6); }
+  .gs.cut { background: rgba(100,100,100,0.3); color: rgba(245,240,232,0.4); text-decoration: line-through; }
+  .gs.nd { background: rgba(100,100,100,0.2); color: rgba(245,240,232,0.3); }
   .player-best-score { text-align: right; }
-  .best-score-num { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 700; }
-  .best-score-num.under { color: #7ec99a; }
-  .best-score-num.over { color: #e07a7a; }
-  .best-score-num.even { color: var(--masters-cream); }
-  .best-score-num.nd { color: rgba(245,240,232,0.3); font-size: 18px; }
-  .best-score-label { font-family: 'Montserrat', sans-serif; font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: rgba(245,240,232,0.4); margin-top: 1px; }
+  .bsn { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 700; }
+  .bsn.under { color: #7ec99a; } .bsn.over { color: #e07a7a; } .bsn.even { color: var(--cream); } .bsn.nd { color: rgba(245,240,232,0.3); font-size:18px; }
+  .bsl { font-family: 'Montserrat', sans-serif; font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: rgba(245,240,232,0.4); }
   .win-prob-col { text-align: center; min-width: 70px; }
-  .win-prob-bar-wrap { width: 60px; height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px; margin: 0 auto 3px; overflow: hidden; }
-  .win-prob-bar { height: 100%; background: linear-gradient(90deg, var(--masters-green-light), var(--masters-gold)); border-radius: 2px; transition: width 0.8s ease; }
-  .win-prob-pct { font-family: 'Montserrat', sans-serif; font-size: 11px; font-weight: 600; color: var(--masters-gold-light); }
-  .win-prob-label { font-family: 'Montserrat', sans-serif; font-size: 8px; letter-spacing: 1px; text-transform: uppercase; color: rgba(245,240,232,0.35); }
-  .prize-col { text-align: center; min-width: 52px; }
-  .prize-amt { font-family: 'Montserrat', sans-serif; font-size: 13px; font-weight: 600; color: var(--masters-gold); }
-  .prize-label { font-family: 'Montserrat', sans-serif; font-size: 8px; letter-spacing: 1px; text-transform: uppercase; color: rgba(245,240,232,0.3); }
-  .lb-table { width: 100%; border-collapse: collapse; font-family: 'Montserrat', sans-serif; font-size: 12px; }
-  .lb-table th { background: rgba(45,107,71,0.4); color: var(--masters-gold); font-size: 9px; letter-spacing: 2px; text-transform: uppercase; padding: 10px 12px; text-align: left; border-bottom: 1px solid rgba(201,168,76,0.3); font-weight: 600; }
-  .lb-table td { padding: 9px 12px; border-bottom: 1px solid rgba(255,255,255,0.04); color: rgba(245,240,232,0.75); vertical-align: middle; }
-  .lb-table tr:hover td { background: rgba(45,107,71,0.15); }
-  .lb-table tr.owned-t1 td { border-left: 3px solid var(--masters-gold); background: rgba(45,107,71,0.12); }
-  .lb-table tr.owned-t2 td { border-left: 3px solid #7ec99a; background: rgba(45,107,71,0.08); }
-  .lb-pos { font-weight: 600; color: var(--masters-cream); width: 40px; }
-  .lb-name { font-weight: 500; color: var(--masters-cream); }
-  .lb-owner-badge { font-size: 9px; padding: 2px 7px; border-radius: 2px; font-weight: 600; letter-spacing: 0.5px; margin-left: 6px; }
-  .badge-t1 { background: rgba(201,168,76,0.2); color: var(--masters-gold); border: 1px solid rgba(201,168,76,0.4); }
-  .badge-t2 { background: rgba(126,201,154,0.15); color: #7ec99a; border: 1px solid rgba(126,201,154,0.3); }
-  .score-val { font-weight: 600; font-size: 13px; }
-  .score-val.under { color: #7ec99a; }
-  .score-val.over { color: #e07a7a; }
-  .score-val.even { color: var(--masters-cream); }
-  .score-val.cut { color: rgba(245,240,232,0.3); }
-  .thru-col { color: rgba(245,240,232,0.5); font-size: 11px; }
-  .alert-banner {
-    background: linear-gradient(90deg, rgba(192,57,43,0.2), rgba(192,57,43,0.05));
-    border: 1px solid rgba(192,57,43,0.5); border-left: 4px solid var(--red-light);
-    padding: 12px 18px; margin-bottom: 20px;
-    font-family: 'Montserrat', sans-serif; font-size: 12px; color: #e07a7a;
-    display: none; align-items: center; gap: 10px;
-  }
-  .alert-banner.show { display: flex; }
-  .loading-state { text-align: center; padding: 60px 20px; font-family: 'Montserrat', sans-serif; font-size: 13px; letter-spacing: 2px; color: rgba(245,240,232,0.4); text-transform: uppercase; }
-  .loading-spinner { width: 32px; height: 32px; border: 2px solid rgba(201,168,76,0.2); border-top-color: var(--masters-gold); border-radius: 50%; margin: 0 auto 16px; animation: spin 1s linear infinite; }
-  @keyframes spin { to { transform: rotate(360deg); } }
-  .tabs { display: flex; margin-bottom: 24px; border-bottom: 1px solid rgba(201,168,76,0.25); }
-  .tab-btn { background: none; border: none; border-bottom: 2px solid transparent; color: rgba(245,240,232,0.45); font-family: 'Montserrat', sans-serif; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; padding: 10px 20px; cursor: pointer; transition: all 0.2s; margin-bottom: -1px; }
-  .tab-btn.active { color: var(--masters-gold); border-bottom-color: var(--masters-gold); }
-  .tab-panel { display: none; }
-  .tab-panel.active { display: block; }
-  .divider-line { height: 1px; background: linear-gradient(90deg, transparent, rgba(201,168,76,0.2), transparent); margin: 28px 0; }
-  @media (max-width: 700px) {
-    .player-card { grid-template-columns: 30px 1fr auto auto; }
-    .win-prob-col { display: none; }
-    .best-score-num { font-size: 22px; }
-  }
+  .wpbw { width:60px; height:4px; background:rgba(255,255,255,0.1); border-radius:2px; margin:0 auto 3px; overflow:hidden; }
+  .wpb { height:100%; background:linear-gradient(90deg,var(--green-light),var(--gold)); border-radius:2px; transition:width 0.8s; }
+  .wpp { font-family:'Montserrat',sans-serif; font-size:11px; font-weight:600; color:var(--gold-light); }
+  .wpl { font-family:'Montserrat',sans-serif; font-size:8px; letter-spacing:1px; text-transform:uppercase; color:rgba(245,240,232,0.35); }
+  .prize-col { text-align:center; min-width:52px; }
+  .prize-amt { font-family:'Montserrat',sans-serif; font-size:13px; font-weight:600; color:var(--gold); }
+  .prize-lbl { font-family:'Montserrat',sans-serif; font-size:8px; letter-spacing:1px; text-transform:uppercase; color:rgba(245,240,232,0.3); }
+  .alert-banner { background:linear-gradient(90deg,rgba(192,57,43,0.2),rgba(192,57,43,0.05)); border:1px solid rgba(192,57,43,0.5); border-left:4px solid var(--red-light); padding:12px 18px; margin-bottom:20px; font-family:'Montserrat',sans-serif; font-size:12px; color:#e07a7a; display:none; align-items:center; gap:10px; }
+  .alert-banner.show { display:flex; }
+  .lb-table { width:100%; border-collapse:collapse; font-family:'Montserrat',sans-serif; font-size:12px; }
+  .lb-table th { background:rgba(45,107,71,0.4); color:var(--gold); font-size:9px; letter-spacing:2px; text-transform:uppercase; padding:10px 12px; text-align:left; border-bottom:1px solid rgba(201,168,76,0.3); font-weight:600; }
+  .lb-table td { padding:9px 12px; border-bottom:1px solid rgba(255,255,255,0.04); color:rgba(245,240,232,0.75); vertical-align:middle; }
+  .lb-table tr:hover td { background:rgba(45,107,71,0.15); }
+  .lb-table tr.owned-t1 td { border-left:3px solid var(--gold); background:rgba(45,107,71,0.12); }
+  .lb-table tr.owned-t2 td { border-left:3px solid #7ec99a; background:rgba(45,107,71,0.08); }
+  .lbpos { font-weight:600; color:var(--cream); width:40px; }
+  .lbname { font-weight:500; color:var(--cream); }
+  .ownbadge { font-size:9px; padding:2px 7px; border-radius:2px; font-weight:600; letter-spacing:0.5px; margin-left:6px; }
+  .bt1 { background:rgba(201,168,76,0.2); color:var(--gold); border:1px solid rgba(201,168,76,0.4); }
+  .bt2 { background:rgba(126,201,154,0.15); color:#7ec99a; border:1px solid rgba(126,201,154,0.3); }
+  .sv { font-weight:600; font-size:13px; }
+  .sv.under{color:#7ec99a;} .sv.over{color:#e07a7a;} .sv.even{color:var(--cream);} .sv.cut{color:rgba(245,240,232,0.3);}
+  .thru { color:rgba(245,240,232,0.5); font-size:11px; }
+  .loading-state { text-align:center; padding:60px 20px; font-family:'Montserrat',sans-serif; font-size:13px; letter-spacing:2px; color:rgba(245,240,232,0.4); text-transform:uppercase; }
+  .spinner { width:32px; height:32px; border:2px solid rgba(201,168,76,0.2); border-top-color:var(--gold); border-radius:50%; margin:0 auto 16px; animation:spin 1s linear infinite; }
+  @keyframes spin { to{transform:rotate(360deg)} }
+  .divider { height:1px; background:linear-gradient(90deg,transparent,rgba(201,168,76,0.2),transparent); margin:28px 0; }
+  @media(max-width:700px){ .player-card{grid-template-columns:30px 1fr auto auto;} .win-prob-col{display:none;} .bsn{font-size:22px;} }
 </style>
 </head>
 <body>
-
 <header>
-  <div class="header-badge">Augusta National · 2025</div>
+  <div class="header-badge">Augusta National · 2026</div>
   <h1>The <span>Masters</span> Tracker</h1>
   <div class="header-sub">Friend Group · $100 Pool</div>
   <div class="header-controls">
@@ -226,7 +120,7 @@
     </div>
     <div class="pot-card">
       <div class="pot-label">Tier 2 Prize</div>
-      <div class="pot-amount">$25 <span style="font-size:14px;color:rgba(245,240,232,0.5)">/ $100*</span></div>
+      <div class="pot-amount">$25 <span style="font-size:14px;color:rgba(245,240,232,0.4)">/ $100*</span></div>
       <div class="pot-leader" id="pot2Leader">Loading…</div>
     </div>
   </div>
@@ -239,29 +133,29 @@
   <div class="tab-panel active" id="tab-standings">
     <div class="standings-section">
       <div class="section-title">Tier 1 Standings <span class="pill">$75 Prize</span></div>
-      <div class="standings-grid" id="tier1Standings"><div class="loading-state"><div class="loading-spinner"></div>Loading scores…</div></div>
+      <div class="standings-grid" id="tier1Standings"><div class="loading-state"><div class="spinner"></div>Loading…</div></div>
     </div>
-    <div class="divider-line"></div>
+    <div class="divider"></div>
     <div class="standings-section">
       <div class="section-title">Tier 2 Standings <span class="pill">$25 · $100 if overall winner</span></div>
-      <div class="standings-grid" id="tier2Standings"><div class="loading-state"><div class="loading-spinner"></div>Loading scores…</div></div>
+      <div class="standings-grid" id="tier2Standings"><div class="loading-state"><div class="spinner"></div>Loading…</div></div>
     </div>
   </div>
 
   <div class="tab-panel" id="tab-leaderboard">
     <div class="section-title">Official Leaderboard</div>
-    <div id="fullLeaderboard"><div class="loading-state"><div class="loading-spinner"></div>Loading…</div></div>
+    <div id="fullLeaderboard"><div class="loading-state"><div class="spinner"></div>Loading…</div></div>
   </div>
 </div>
 
 <script>
 const TIER1 = {
-  "Big Mo": ["Akshay Bhatia","Brian Harman","Brooks Koepka","Jon Rahm","Kurt Kitayama","Rasmus Højgaard"],
+  "Big Mo": ["Akshay Bhatia","Brian Harman","Brooks Koepka","Jon Rahm","Kurt Kitayama","Rasmus Hojgaard"],
   "Clint":  ["J.J. Spaun","Matt Fitzpatrick","Patrick Cantlay","Patrick Reed","Ryan Fox","Ryan Gerard"],
   "Nic":    ["Bryson DeChambeau","Cameron Smith","Chris Gotterup","Gary Woodland","Sergio Garcia","Viktor Hovland"],
   "Nick":   ["Daniel Berger","Harris English","Jordan Spieth","Maverick McNealy","Rory McIlroy","Wyndham Clark"],
-  "Ty":     ["Dustin Johnson","Marco Penge","Nicolai Højgaard","Russell Henley","Scottie Scheffler","Sungjae Im"],
-  "Coop":   ["Alex Noren","Casey Jarvis","Collin Morikawa","Jacob Bridgeman","Ludvig Åberg","Shane Lowry"],
+  "Ty":     ["Dustin Johnson","Marco Penge","Nicolai Hojgaard","Russell Henley","Scottie Scheffler","Sungjae Im"],
+  "Coop":   ["Alex Noren","Casey Jarvis","Collin Morikawa","Jacob Bridgeman","Ludvig Aberg","Shane Lowry"],
   "Tim":    ["Cameron Young","Corey Conners","Justin Thomas","Max Homa","Min Woo Lee","Sam Stevens"],
   "Tommy":  ["Adam Scott","Justin Rose","Keegan Bradley","Kristoffer Reitan","Tommy Fleetwood","Tyrrell Hatton"],
   "Travis": ["Aldrich Potgieter","Harry Hall","Hideki Matsuyama","Jason Day","Robert MacIntyre","Sepp Straka"],
@@ -280,67 +174,76 @@ const TIER2 = {
   "Vince":  ["Brandon Holtz","Nick Taylor","Zach Johnson"]
 };
 
-let leaderboardData = [];
-const REFRESH_INTERVAL = 90000;
+let LB = [];
+
+// Normalize names — strip accents, lowercase, last name only for matching
+const norm = s => s.trim().toLowerCase()
+  .replace(/[øo]/g, 'o').replace(/[åa]/g,'a').replace(/[éèe]/g,'e')
+  .replace(/[áà]/g,'a').replace(/[óò]/g,'o').replace(/ú/g,'u').replace(/ñ/g,'n')
+  .replace(/\s+/g,' ');
+const last = s => norm(s).split(' ').pop();
 
 async function fetchData() {
   document.getElementById("lastUpdated").textContent = "Fetching scores…";
-  const endpoints = [
-    "https://site.api.espn.com/apis/site/v2/sports/golf/leaderboard?league=pga&event=401811941
-",
-    "https://site.api.espn.com/apis/site/v2/sports/golf/pga/leaderboard"
-  ];
+
+  // Multiple proxies × multiple ESPN endpoints
+  const ESPN_EVENT = "https://site.api.espn.com/apis/site/v2/sports/golf/leaderboard?league=pga&event=401811941";
+  const ESPN_PGA   = "https://site.api.espn.com/apis/site/v2/sports/golf/pga/leaderboard";
+
   const proxies = [
-    u => "https://corsproxy.io/?" + encodeURIComponent(u),
-    u => "https://api.allorigins.win/get?url=" + encodeURIComponent(u),
-    u => "https://api.codetabs.com/v1/proxy?quest=" + encodeURIComponent(u)
+    u => `https://corsproxy.io/?${encodeURIComponent(u)}`,
+    u => `https://api.allorigins.win/get?url=${encodeURIComponent(u)}`,
+    u => `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(u)}`,
+    u => `https://thingproxy.freeboard.io/fetch/${u}`,
   ];
 
-  for (const endpoint of endpoints) {
-    for (const makeProxy of proxies) {
+  for (const ep of [ESPN_EVENT, ESPN_PGA]) {
+    for (const px of proxies) {
       try {
-        const r = await fetch(makeProxy(endpoint));
+        const r = await fetch(px(ep));
         if (!r.ok) continue;
-        const text = await r.text();
-        const parsed = JSON.parse(text);
+        const txt = await r.text();
+        if (!txt || txt.length < 100) continue;
+        const parsed = JSON.parse(txt);
         const raw = parsed.contents ? JSON.parse(parsed.contents) : parsed;
 
-        // Find the event data
-        let eventObj = null;
-        if (raw?.events) {
-          eventObj = raw.events.find(e =>
-            (e.name||"").toLowerCase().includes("master") ||
-            (e.shortName||"").toLowerCase().includes("master")
-          ) || raw.events[0];
-        } else if (raw?.competitions) {
-          eventObj = raw;
+        // Find competitors array wherever it lives
+        let comps = null;
+        if (raw?.competitions?.[0]?.competitors?.length)
+          comps = raw.competitions[0].competitors;
+        else if (raw?.events?.length) {
+          for (const ev of raw.events) {
+            const c = ev?.competitions?.[0]?.competitors;
+            if (c?.length) {
+              // prefer the Masters event
+              const isMasters = (ev.name||ev.shortName||'').toLowerCase().includes('master');
+              if (isMasters || !comps) comps = c;
+              if (isMasters) break;
+            }
+          }
         }
 
-        const competitors = eventObj?.competitions?.[0]?.competitors;
-        if (competitors?.length) {
-          processData(competitors);
-          return;
-        }
+        if (comps?.length) { ingest(comps); return; }
       } catch(e) { /* try next */ }
     }
   }
 
-  document.getElementById("lastUpdated").textContent =
-    "⚠ No scores yet — tournament starts Thursday. Will auto-refresh.";
-  if (!leaderboardData.length) renderNoData();
+  document.getElementById("lastUpdated").textContent = "⚠ Could not load scores. Tap ↻ Refresh to try again.";
+  if (!LB.length) noData();
 }
 
-function processData(competitors) {
-  leaderboardData = competitors.map(c => {
-    const score = c.score?.displayValue ?? "E";
+function ingest(comps) {
+  LB = comps.map(c => {
+    const sc = c.score?.displayValue ?? "E";
     const status = c.status?.type?.name || "";
     const cut = status.includes("CUT") || c.status?.type?.id === "6";
     return {
       name: norm(c.athlete?.displayName || ""),
-      score: parseScore(score),
+      rawName: c.athlete?.displayName || "",
+      score: parseSc(sc),
       thru: c.status?.thru ?? c.status?.displayValue ?? "--",
-      rounds: (c.linescores||[]).map(r => r.displayValue),
-      position: c.status?.position?.displayValue || "--",
+      rounds: (c.linescores||[]).map(r=>r.displayValue),
+      pos: c.status?.position?.displayValue || "--",
       cut
     };
   }).sort((a,b) => {
@@ -352,156 +255,81 @@ function processData(competitors) {
   render();
 }
 
-function parseScore(s) {
-  if (!s || s==="E" || s==="0") return 0;
-  const n = parseInt(s.replace("+",""),10);
-  return isNaN(n) ? 0 : n;
-}
-
-function norm(n) {
-  return n.trim().replace(/\s+/g," ")
-    .replace(/[øØ]/g,m=>m==="ø"?"o":"O")
-    .replace(/[åÅ]/g,m=>m==="å"?"a":"A")
-    .replace(/[éè]/g,"e").replace(/[áà]/g,"a")
-    .replace(/[óò]/g,"o").replace(/ú/g,"u").replace(/ñ/g,"n");
-}
+const parseSc = s => { if (!s||s==="E"||s==="0") return 0; const n=parseInt(s.replace("+",""),10); return isNaN(n)?0:n; };
+const fmtSc = s => s===null?'–':s===0?'E':s>0?'+'+s:''+s;
+const scCls = s => s===null?'nd':s<0?'under':s>0?'over':'even';
 
 function findPlayer(name) {
-  const n = norm(name).toLowerCase();
-  const last = n.split(" ").pop();
-  return leaderboardData.find(p => {
-    const pn = p.name.toLowerCase();
-    const pl = pn.split(" ").pop();
-    return pn === n || pl === last;
-  }) || null;
+  const l = last(name);
+  return LB.find(p => p.name === norm(name) || last(p.name) === l) || null;
 }
 
-function fmtScore(s) {
-  if (s===null||s===undefined) return "–";
-  if (s===0) return "E";
-  return s>0?"+"+s:""+s;
-}
+function gaussRnd() { return Math.sqrt(-2*Math.log(1-Math.random()))*Math.cos(2*Math.PI*Math.random()); }
 
-function scoreClass(s) {
-  if (s===null||s===undefined) return "nd";
-  return s<0?"under":s>0?"over":"even";
-}
-
-function getRoundsComplete() {
-  if (!leaderboardData.length) return 0;
-  const thrus = leaderboardData.filter(p=>!p.cut).map(p=>{
-    if (p.thru==="F"||p.thru==="18") return 18;
-    const n=parseInt(p.thru,10); return isNaN(n)?0:n;
-  });
-  if (!thrus.length) return 0;
-  const avg = thrus.reduce((a,b)=>a+b,0)/thrus.length;
-  const fromRounds = Math.max(...leaderboardData.map(p=>(p.rounds||[]).length));
-  return Math.max(Math.floor(avg/18), fromRounds>0?fromRounds-1:0);
-}
-
-function gaussRandom() {
-  return Math.sqrt(-2*Math.log(1-Math.random()))*Math.cos(2*Math.PI*Math.random());
-}
-
-function estimateWinProb(myScore, allScores, roundsComplete) {
+function winProb(myScore, allScores, roundsDone) {
   if (!allScores.length) return null;
-  const remaining = Math.max(0, 4-roundsComplete);
-  const sd = 3.0 * Math.sqrt(remaining+0.5);
-  let wins = 0;
-  const N = 3000;
+  const sd = 3.0 * Math.sqrt(Math.max(0,4-roundsDone)+0.5);
+  let wins=0; const N=3000;
   for (let i=0;i<N;i++) {
-    const myFinal = myScore + gaussRandom()*sd;
-    let won = true;
-    for (const opp of allScores) {
-      if (opp===myScore) continue;
-      if (opp+gaussRandom()*sd <= myFinal) { won=false; break; }
-    }
-    if (won) wins++;
+    const me = myScore + gaussRnd()*sd;
+    let w=true;
+    for (const o of allScores) { if (o!==myScore && o+gaussRnd()*sd<=me){w=false;break;} }
+    if(w) wins++;
   }
-  return (wins/N)*100;
+  return wins/N*100;
 }
 
-function buildParticipants(roster) {
-  const rc = getRoundsComplete();
+function roundsDone() {
+  if (!LB.length) return 0;
+  const thrus = LB.filter(p=>!p.cut).map(p=>{ const t=p.thru; if(t==="F"||t==="18") return 18; const n=parseInt(t,10); return isNaN(n)?0:n; });
+  const avg = thrus.length ? thrus.reduce((a,b)=>a+b,0)/thrus.length : 0;
+  const maxR = Math.max(...LB.map(p=>(p.rounds||[]).length), 0);
+  return Math.max(Math.floor(avg/18), maxR>0?maxR-1:0);
+}
+
+function buildParts(roster) {
+  const rd = roundsDone();
   const parts = Object.entries(roster).map(([name,golfers])=>{
     const pdata = golfers.map(g=>findPlayer(g));
     const scores = pdata.map(p=>p&&!p.cut?p.score:null);
     const valid = scores.filter(s=>s!==null);
     const best = valid.length ? Math.min(...valid) : null;
-    return {name,golfers,pdata,scores,best,rc};
+    return {name,golfers,pdata,scores,best,rd};
   });
   const bests = parts.map(p=>p.best).filter(s=>s!==null);
-  parts.forEach(p=>{
-    p.prob = p.best!==null ? estimateWinProb(p.best,bests,rc) : null;
-  });
-  return parts.sort((a,b)=>{
-    if (a.best===null&&b.best===null) return 0;
-    if (a.best===null) return 1;
-    if (b.best===null) return -1;
-    return a.best-b.best;
-  });
+  parts.forEach(p=>{ p.prob = p.best!==null ? winProb(p.best,bests,rd) : null; });
+  return parts.sort((a,b)=>{ if(a.best===null&&b.best===null)return 0; if(a.best===null)return 1; if(b.best===null)return -1; return a.best-b.best; });
 }
 
 function render() {
-  const t1 = buildParticipants(TIER1);
-  const t2 = buildParticipants(TIER2);
-  renderPots(t1,t2);
+  const t1=buildParts(TIER1), t2=buildParts(TIER2);
+  // Pots
+  const l1=t1[0], l2=t2[0];
+  document.getElementById("pot1Leader").innerHTML = l1?.best!==null ? `Current leader: <strong>${l1.name}</strong> (${fmtSc(l1.best)})` : "No scores yet";
+  document.getElementById("pot2Leader").innerHTML = l2?.best!==null ? `Current leader: <strong>${l2.name}</strong> (${fmtSc(l2.best)})` : "No scores yet";
+  // Grids
   renderGrid("tier1Standings",t1,75);
   renderGrid("tier2Standings",t2,25);
-  renderLeaderboard();
+  renderLB();
   checkAlert();
 }
 
-function renderNoData() {
-  const msg='<div class="loading-state">⚠ Tournament hasn\'t started yet — check back Thursday!</div>';
-  ["tier1Standings","tier2Standings","fullLeaderboard"].forEach(id=>{
-    document.getElementById(id).innerHTML=msg;
-  });
-}
-
-function renderPots(t1,t2) {
-  const l1=t1[0], l2=t2[0];
-  document.getElementById("pot1Leader").innerHTML = l1?.best!==null
-    ? `Current leader: <strong>${l1.name}</strong> (${fmtScore(l1.best)})` : "No scores yet";
-  document.getElementById("pot2Leader").innerHTML = l2?.best!==null
-    ? `Current leader: <strong>${l2.name}</strong> (${fmtScore(l2.best)})` : "No scores yet";
-}
-
-function checkAlert() {
-  if (!leaderboardData.length) return;
-  const leader = leaderboardData[0];
-  const t2names = Object.values(TIER2).flat().map(n=>norm(n).toLowerCase().split(" ").pop());
-  const leaderLast = leader.name.toLowerCase().split(" ").pop();
-  const alertEl = document.getElementById("tier2Alert");
-  if (t2names.includes(leaderLast)) {
-    let owner="";
-    for (const [p,gs] of Object.entries(TIER2)) {
-      if (gs.map(n=>norm(n).toLowerCase().split(" ").pop()).includes(leaderLast)) { owner=p; break; }
-    }
-    document.getElementById("tier2AlertText").textContent =
-      `🏆 ${leader.name} (${fmtScore(leader.score)}) is a Tier 2 golfer owned by ${owner} and is LEADING THE TOURNAMENT! If they win, ${owner} takes the full $100!`;
-    alertEl.classList.add("show");
-  } else {
-    alertEl.classList.remove("show");
-  }
+function noData() {
+  const m='<div class="loading-state">⚠ No scores available yet. Tap ↻ Refresh to try again.</div>';
+  ["tier1Standings","tier2Standings","fullLeaderboard"].forEach(id=>document.getElementById(id).innerHTML=m);
 }
 
 function renderGrid(id, parts, prize) {
-  const el = document.getElementById(id);
-  const maxProb = Math.max(...parts.filter(p=>p.prob!=null).map(p=>p.prob),1);
-  el.innerHTML = parts.map((p,i)=>{
-    const rank=i+1;
-    const sc=scoreClass(p.best);
-    const probPct = p.prob!=null ? p.prob.toFixed(1)+"%" : "–%";
-    const probBar = p.prob!=null ? Math.min(100,(p.prob/maxProb)*100) : 0;
+  const maxP = Math.max(...parts.filter(p=>p.prob!=null).map(p=>p.prob),1);
+  document.getElementById(id).innerHTML = parts.map((p,i)=>{
+    const rank=i+1, sc=scCls(p.best);
+    const pctTxt = p.prob!=null ? p.prob.toFixed(1)+"%" : "–%";
+    const bar = p.prob!=null ? Math.min(100,p.prob/maxP*100) : 0;
     const ghtml = p.golfers.map((g,idx)=>{
       const pd=p.pdata[idx], gs=p.scores[idx];
-      let cls="even";
-      if (pd&&pd.cut) cls="cut";
-      else if (gs!==null&&gs<0) cls="under";
-      else if (gs!==null&&gs>0) cls="over";
-      const lbl=gs!==null?fmtScore(gs):(pd?"--":"DNS");
-      return `<span class="golfer-tag">${g} <span class="golfer-score-inline ${cls}">${lbl}</span></span>`;
+      let cls = pd ? (pd.cut?'cut':scCls(gs)) : 'nd';
+      const lbl = gs!==null ? fmtSc(gs) : (pd?'--':'N/A');
+      return `<span class="gtag">${g} <span class="gs ${cls}">${lbl}</span></span>`;
     }).join(" ");
     return `<div class="player-card rank-${rank>3?'other':rank}">
       <div class="rank-num">${rank}</div>
@@ -510,41 +338,57 @@ function renderGrid(id, parts, prize) {
         <div class="player-golfers">${ghtml}</div>
       </div>
       <div class="win-prob-col">
-        <div class="win-prob-bar-wrap"><div class="win-prob-bar" style="width:${probBar}%"></div></div>
-        <div class="win-prob-pct">${probPct}</div>
-        <div class="win-prob-label">Win odds</div>
+        <div class="wpbw"><div class="wpb" style="width:${bar}%"></div></div>
+        <div class="wpp">${pctTxt}</div>
+        <div class="wpl">Win odds</div>
       </div>
       <div class="player-best-score">
-        <div class="best-score-num ${sc}">${p.best!==null?fmtScore(p.best):"–"}</div>
-        <div class="best-score-label">Best score</div>
+        <div class="bsn ${sc}">${p.best!==null?fmtSc(p.best):'–'}</div>
+        <div class="bsl">Best score</div>
       </div>
       <div class="prize-col">
         <div class="prize-amt">${rank===1?'$'+prize:'–'}</div>
-        <div class="prize-label">${rank===1?'leads':'prize'}</div>
+        <div class="prize-lbl">${rank===1?'leads':'prize'}</div>
       </div>
     </div>`;
   }).join("");
 }
 
-function renderLeaderboard() {
-  const el = document.getElementById("fullLeaderboard");
-  if (!leaderboardData.length) { el.innerHTML='<div class="loading-state">No data yet</div>'; return; }
+function renderLB() {
+  if (!LB.length) { document.getElementById("fullLeaderboard").innerHTML='<div class="loading-state">No data yet</div>'; return; }
   const t1map={}, t2map={};
-  for (const [owner,gs] of Object.entries(TIER1)) gs.forEach(g=>t1map[norm(g).toLowerCase().split(" ").pop()]=owner);
-  for (const [owner,gs] of Object.entries(TIER2)) gs.forEach(g=>t2map[norm(g).toLowerCase().split(" ").pop()]=owner);
-  const rows = leaderboardData.map(p=>{
-    const last=p.name.toLowerCase().split(" ").pop();
-    const t1o=t1map[last], t2o=t2map[last];
-    const tier=t1o?1:t2o?2:0;
-    const owner=t1o||t2o||"";
-    const cls=tier?`owned-t${tier}`:"";
-    const badge=tier?`<span class="lb-owner-badge badge-t${tier}">${owner} · T${tier}</span>`:"";
-    const sc=p.cut?"cut":scoreClass(p.score);
-    const sd=p.cut?"CUT":fmtScore(p.score);
-    const rounds=(p.rounds||[]).join(" · ")||"--";
-    return `<tr class="${cls}"><td class="lb-pos">${p.position}</td><td class="lb-name">${p.name}${badge}</td><td class="score-val ${sc}">${sd}</td><td class="thru-col">${p.cut?"CUT":p.thru}</td><td class="thru-col" style="font-size:11px;color:rgba(245,240,232,0.4)">${rounds}</td></tr>`;
+  for (const [o,gs] of Object.entries(TIER1)) gs.forEach(g=>t1map[last(g)]=o);
+  for (const [o,gs] of Object.entries(TIER2)) gs.forEach(g=>t2map[last(g)]=o);
+  const rows = LB.map(p=>{
+    const l=last(p.name), t1o=t1map[l], t2o=t2map[l];
+    const tier=t1o?1:t2o?2:0, owner=t1o||t2o||"";
+    const badge=tier?`<span class="ownbadge bt${tier}">${owner} · T${tier}</span>`:"";
+    const sc=p.cut?'cut':scCls(p.score);
+    const rounds=(p.rounds||[]).join(' · ')||'--';
+    return `<tr class="${tier?'owned-t'+tier:''}">
+      <td class="lbpos">${p.pos}</td>
+      <td class="lbname">${p.rawName}${badge}</td>
+      <td class="sv ${sc}">${p.cut?'CUT':fmtSc(p.score)}</td>
+      <td class="thru">${p.cut?'CUT':p.thru}</td>
+      <td class="thru" style="font-size:11px;color:rgba(245,240,232,0.4)">${rounds}</td>
+    </tr>`;
   }).join("");
-  el.innerHTML=`<table class="lb-table"><thead><tr><th>Pos</th><th>Player</th><th>Score</th><th>Thru</th><th>Rounds</th></tr></thead><tbody>${rows}</tbody></table>`;
+  document.getElementById("fullLeaderboard").innerHTML=`<table class="lb-table"><thead><tr><th>Pos</th><th>Player</th><th>Score</th><th>Thru</th><th>Rounds</th></tr></thead><tbody>${rows}</tbody></table>`;
+}
+
+function checkAlert() {
+  if (!LB.length) return;
+  const leader = LB[0];
+  const l = last(leader.name);
+  const t2map = {};
+  for (const [o,gs] of Object.entries(TIER2)) gs.forEach(g=>t2map[last(g)]=o);
+  const alertEl = document.getElementById("tier2Alert");
+  if (t2map[l]) {
+    document.getElementById("tier2AlertText").textContent = `🏆 ${leader.rawName} (${fmtSc(leader.score)}) is a Tier 2 golfer owned by ${t2map[l]} and is LEADING THE TOURNAMENT! If they win, ${t2map[l]} takes the full $100!`;
+    alertEl.classList.add("show");
+  } else {
+    alertEl.classList.remove("show");
+  }
 }
 
 function switchTab(e,name) {
@@ -555,7 +399,8 @@ function switchTab(e,name) {
 }
 
 fetchData();
-setInterval(fetchData, REFRESH_INTERVAL);
+setInterval(fetchData, 90000);
 </script>
 </body>
 </html>
+
